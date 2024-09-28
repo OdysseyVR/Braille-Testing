@@ -1,0 +1,253 @@
+body {
+    background-color: yellow !important;
+}
+
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.page {
+    display: none;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.page.active {
+    display: block;
+}
+
+h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+#grade1-content, #grade2-content, #practice-content {
+    margin-top: 20px;
+}
+
+.braille-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.braille-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px;
+    width: 80px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.braille-item:hover {
+    transform: translateY(-5px);
+}
+
+.braille-symbol {
+    font-size: 36px;
+    color: var(--primary-color);
+}
+
+.braille-letter {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#braille-display {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-content: center;
+    margin: 20px auto;
+    width: 60px;
+}
+
+.braille-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ccc;
+    transition: background-color 0.3s ease;
+}
+
+.braille-dot.active {
+    background-color: var(--primary-color);
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px 0;
+    width: 100%;
+    max-width: 300px;
+}
+
+.feedback {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.correct {
+    color: var(--secondary-color);
+}
+
+.incorrect {
+    color: var(--accent-color);
+}
+
+#practice-progress {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    .page {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 14px;
+        margin: 5px;
+    }
+
+    .braille-symbol {
+        font-size: 28px;
+    }
+
+    .braille-letter {
+        font-size: 16px;
+    }
+
+    .braille-item {
+        width: 70px;
+    }
+
+    input[type="text"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #braille-display {
+        width: 50px;
+    }
+
+    .braille-dot {
+        width: 16px;
+        height: 16px;
+    }
+
+    #practice-progress {
+        font-size: 14px;
+    }
+}
+
+/* Additional media query for even smaller screens */
+@media (max-width: 400px) {
+    body {
+        font-size: 12px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    .braille-symbol {
+        font-size: 24px;
+    }
+
+    .braille-letter {
+        font-size: 14px;
+    }
+
+    .braille-item {
+        width: 60px;
+    }
+
+    input[type="text"] {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    #braille-display {
+        width: 40px;
+    }
+
+    .braille-dot {
+        width: 14px;
+        height: 14px;
+    }
+
+    #practice-progress {
+        font-size: 12px;
+    }
+}

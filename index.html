@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braille Learning App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ecf0f1;
+            color: #34495e;
+        }
+        .page {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        h1, h2 {
+            color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        .braille-item {
+            display: inline-block;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+        }
+        .braille-symbol {
+            font-size: 36px;
+            color: #3498db;
+        }
+        .braille-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .braille-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+        }
+        #braille-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px auto;
+        }
+        .braille-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .braille-column:first-child {
+            flex-direction: column-reverse;
+        }
+        .braille-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ccc;
+            transition: background-color 0.3s ease;
+        }
+        .braille-dot.active {
+            background-color: #3498db;
+        }
+        #dot-1 { grid-area: 1 / 1; }
+        #dot-2 { grid-area: 2 / 1; }
+        #dot-3 { grid-area: 3 / 1; }
+        #dot-4 { grid-area: 1 / 2; }
+        #dot-5 { grid-area: 2 / 2; }
+        #dot-6 { grid-area: 3 / 2; }
+        /* New styles for Braille cell layout */
+        .braille-cell {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 60px;
+            margin: 20px auto;
+        }
+        #braille-input-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #braille-input {
+            margin-top: 10px;
+            padding: 5px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Welcome Page -->
+        <div id="welcome-page" class="page">
+            <h1>Welcome to the Braille Learning App</h1>
+            <button onclick="navigateTo('grade1')">Start Grade 1 Braille</button>
+            <button onclick="navigateTo('grade2')">Start Grade 2 Braille</button>
+            <button onclick="navigateTo('practice')">Braille Input Practice</button>
+        </div>
+
+        <!-- Grade 1 Braille Section -->
+        <div id="grade1-page" class="page" style="display: none;">
+            <h2>Grade 1 Braille</h2>
+            <div id="grade1-content">
+                <!-- Content will be dynamically loaded -->
+            </div>
+            <button onclick="navigateTo('welcome')">Back to Home</button>
+        </div>
+
+        <!-- Grade 2 Braille Section -->
+        <div id="grade2-page" class="page" style="display: none;">
+            <h2>Grade 2 Braille</h2>
+            <div id="grade2-content">
+                <!-- Content will be dynamically loaded -->
+            </div>
+            <button onclick="navigateTo('welcome')">Back to Home</button>
+        </div>
+
+        <!-- Braille Input Practice Section -->
+        <div id="practice-page" class="page" style="display: none;">
+            <h2>Braille Input Practice</h2>
+            <div id="practice-content">
+                <p>Type Braille symbols using your keyboard. Use the keys SDF (dots 1-3) and JKL (dots 4-6).</p>
+                <div id="braille-input-area">
+                    <div id="braille-display">
+                        <div class="braille-column">
+                            <div class="braille-dot" data-dot="1"></div>
+                            <div class="braille-dot" data-dot="2"></div>
+                            <div class="braille-dot" data-dot="3"></div>
+                        </div>
+                        <div class="braille-column">
+                            <div class="braille-dot" data-dot="4"></div>
+                            <div class="braille-dot" data-dot="5"></div>
+                            <div class="braille-dot" data-dot="6"></div>
+                        </div>
+                    </div>
+                    <input type="text" id="braille-input" autofocus placeholder="Press SDFJKL to input Braille" onkeydown="handleBrailleInput(event)" readonly>
+                </div>
+                <p>Current letter to practice: <span id="target-letter"></span></p>
+                <button onclick="checkBrailleInput()">Check Input</button>
+                <p id="braille-feedback" class="feedback"></p>
+                <button onclick="generateNewLetter()">New Letter</button>
+                <p id="practice-progress">Correct Answers: 0</p>
+                <button onclick="resetProgress('practice')">Reset Progress</button>
+            </div>
+            <button onclick="navigateTo('welcome')">Back to Home</button>
+        </div>
+    </div>
+    <script src="script.js?v=1"></script>
+</body>
+</html>
