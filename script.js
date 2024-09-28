@@ -4,32 +4,32 @@ let brailleDots = [false, false, false, false, false, false];
 let targetLetter = '';
 
 const brailleAlphabet = [
-    { letter: 'A', symbol: '⠁' },
-    { letter: 'B', symbol: '⠃' },
-    { letter: 'C', symbol: '⠉' },
-    { letter: 'D', symbol: '⠙' },
-    { letter: 'E', symbol: '⠑' },
-    { letter: 'F', symbol: '⠋' },
-    { letter: 'G', symbol: '⠛' },
-    { letter: 'H', symbol: '⠓' },
-    { letter: 'I', symbol: '⠊' },
-    { letter: 'J', symbol: '⠚' },
-    { letter: 'K', symbol: '⠅' },
-    { letter: 'L', symbol: '⠇' },
-    { letter: 'M', symbol: '⠍' },
-    { letter: 'N', symbol: '⠝' },
-    { letter: 'O', symbol: '⠕' },
-    { letter: 'P', symbol: '⠏' },
-    { letter: 'Q', symbol: '⠟' },
-    { letter: 'R', symbol: '⠗' },
-    { letter: 'S', symbol: '⠎' },
-    { letter: 'T', symbol: '⠞' },
-    { letter: 'U', symbol: '⠥' },
-    { letter: 'V', symbol: '⠧' },
-    { letter: 'W', symbol: '⠺' },
-    { letter: 'X', symbol: '⠭' },
-    { letter: 'Y', symbol: '⠽' },
-    { letter: 'Z', symbol: '⠵' },
+    { letter: 'A', pattern: [1,0,0,0,0,0] },
+    { letter: 'B', pattern: [1,1,0,0,0,0] },
+    { letter: 'C', pattern: [1,0,0,1,0,0] },
+    { letter: 'D', pattern: [1,0,0,1,1,0] },
+    { letter: 'E', pattern: [1,0,0,0,1,0] },
+    { letter: 'F', pattern: [1,1,0,1,0,0] },
+    { letter: 'G', pattern: [1,1,0,1,1,0] },
+    { letter: 'H', pattern: [1,1,0,0,1,0] },
+    { letter: 'I', pattern: [0,1,0,1,0,0] },
+    { letter: 'J', pattern: [0,1,0,1,1,0] },
+    { letter: 'K', pattern: [1,0,1,0,0,0] },
+    { letter: 'L', pattern: [1,1,1,0,0,0] },
+    { letter: 'M', pattern: [1,0,1,1,0,0] },
+    { letter: 'N', pattern: [1,0,1,1,1,0] },
+    { letter: 'O', pattern: [1,0,1,0,1,0] },
+    { letter: 'P', pattern: [1,1,1,1,0,0] },
+    { letter: 'Q', pattern: [1,1,1,1,1,0] },
+    { letter: 'R', pattern: [1,1,1,0,1,0] },
+    { letter: 'S', pattern: [0,1,1,1,0,0] },
+    { letter: 'T', pattern: [0,1,1,1,1,0] },
+    { letter: 'U', pattern: [1,0,1,0,0,1] },
+    { letter: 'V', pattern: [1,1,1,0,0,1] },
+    { letter: 'W', pattern: [0,1,0,1,1,1] },
+    { letter: 'X', pattern: [1,0,1,1,0,1] },
+    { letter: 'Y', pattern: [1,0,1,1,1,1] },
+    { letter: 'Z', pattern: [1,0,1,0,1,1] },
     // Numbers
     { letter: '1', symbol: '⠼⠁' },
     { letter: '2', symbol: '⠼⠃' },
@@ -108,6 +108,7 @@ function handleBrailleInput(event) {
     if (dotIndex !== -1) {
         brailleDots[dotIndex] = !brailleDots[dotIndex];
         updateBrailleDisplay();
+        console.log("Updated braille dots:", brailleDots.map(d => d ? 1 : 0).join(''));
         event.preventDefault();
     }
 }
@@ -139,23 +140,46 @@ function resetBrailleDots() {
 }
 
 function checkBrailleInput() {
-    const inputSymbol = brailleDotsToSymbol(brailleDots);
+    console.log("Checking Braille input");
     const correctEntry = brailleAlphabet.find(item => item.letter === targetLetter);
+    console.log("Target letter:", targetLetter);
+    console.log("Input pattern:", brailleDots.map(d => d ? 1 : 0).join(''));
+    console.log("Correct pattern:", correctEntry ? correctEntry.pattern.join('') : "Not found");
+
     const feedback = document.getElementById('braille-feedback');
 
-    if (correctEntry && inputSymbol === correctEntry.symbol) {
+    const isCorrect = patternsMatch(brailleDots, correctEntry.pattern);
+    console.log("Patterns match:", isCorrect);
+
+    if (correctEntry && isCorrect) {
         feedback.textContent = 'Correct!';
         feedback.className = 'feedback correct';
-        setTimeout(generateNewLetter, 1000);
+        setTimeout(() => {
+            feedback.textContent = '';
+            generateNewLetter();
+        }, 1000);
     } else {
         feedback.textContent = 'Incorrect. Try again.';
         feedback.className = 'feedback incorrect';
     }
 }
 
+function patternsMatch(inputPattern, correctPattern) {
+    const match = inputPattern.every((value, index) => (value === true) === (correctPattern[index] === 1));
+    console.log("Pattern comparison:");
+    inputPattern.forEach((value, index) => {
+        console.log(`Dot ${index + 1}: Input=${value}, Correct=${correctPattern[index]}, Match=${(value === true) === (correctPattern[index] === 1)}`);
+    });
+    return match;
+}
+
 function brailleDotsToSymbol(dots) {
     const base = 0x2800;
-    const binaryString = dots.map(dot => dot ? '1' : '0').join('');
+    const binaryString = dots.map((dot, index) => {
+        // Reorder the dots to match Braille cell order
+        const order = [0, 3, 1, 4, 2, 5];
+        return dot ? '1' : '0';
+    }).join('');
     const decimalValue = parseInt(binaryString, 2);
     return String.fromCharCode(base + decimalValue);
 }
@@ -202,3 +226,25 @@ function loadGrade2Content() {
     contractionHTML += '</div>';
     content.innerHTML = contractionHTML;
 }
+
+function displayBrailleState() {
+    const stateDiv = document.createElement('div');
+    stateDiv.id = 'braille-state';
+    stateDiv.style.fontFamily = 'monospace';
+    stateDiv.style.marginTop = '10px';
+    const brailleInputArea = document.getElementById('braille-input-area');
+    brailleInputArea.appendChild(stateDiv);
+}
+
+function updateBrailleState() {
+    const stateDiv = document.getElementById('braille-state');
+    if (stateDiv) {
+        stateDiv.textContent = `Braille state: ${brailleDots.map(d => d ? '1' : '0').join('')}`;
+    }
+}
+
+// Call this in loadPracticeContent
+displayBrailleState();
+
+// Call this in handleBrailleInput and resetBrailleDots
+updateBrailleState();
